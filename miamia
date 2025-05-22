@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metodología LST, NDVI y NDBI con Efecto Parallax</title>
+  <style>
+    body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    section { position: relative; width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+    .parallax { background-attachment: fixed; background-size: cover; background-position: center; }
+    #intro { background: #333; }
+    #ndvi { background-image: url('https://example.com/ndvi-background.jpg'); }
+    #ndbi { background-image: url('https://example.com/ndbi-background.jpg'); }
+    #lst  { background-image: url('https://example.com/lst-background.jpg'); }
+    .content { max-width: 800px; padding: 2rem; background: rgba(0,0,0,0.5); border-radius: 8px; }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 1s ease-out, transform 1s ease-out; }
+    .visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <section id="intro">
+    <div class="content fade-in">
+      <h1>Metodología en ArcGIS Pro</h1>
+      <p>Se analizaron los años 2014, 2016, 2019 y 2024 usando imágenes descargadas desde <strong>USGS Earth Explorer</strong> y procesadas en <strong>ArcGIS Pro</strong>.</p>
+    </div>
+  </section>
+
+  <section id="ndvi" class="parallax">
+    <div class="content fade-in">
+      <h2>1. Cálculo de NDVI en ArcGIS Pro</h2>
+      <pre><code>NDVI = ("Band5" - "Band4") / ("Band5" + "Band4")</code></pre>
+      <p>Utiliza la calculadora ráster (Raster Calculator) con bandas NIR y Roja.</p>
+    </div>
+  </section>
+
+  <section id="ndbi" class="parallax">
+    <div class="content fade-in">
+      <h2>2. Cálculo de NDBI en ArcGIS Pro</h2>
+      <pre><code>NDBI = ("Band6" - "Band5") / ("Band6" + "Band5")</code></pre>
+      <p>Aplica la calculadora ráster usando bandas SWIR y NIR para identificar áreas urbanas.</p>
+    </div>
+  </section>
+
+  <section id="lst" class="parallax">
+    <div class="content fade-in">
+      <h2>3. Extracción de LST en ArcGIS Pro</h2>
+      <pre><code>
+// 1. Convertir DN a radiancia:
+Radiance = M * DN + A
+// 2. Radiancia a temperatura:
+BrightnessTemp = K2 / ln(K1 / Radiance + 1)
+// 3. Ajustar a °C:
+LST = BrightnessTemp - 273.15
+      </code></pre>
+      <p>Ejecuta los pasos en la calculadora ráster y transforma a grados Celsius.</p>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.fade-in').forEach(function(el) {
+        observer.observe(el);
+      });
+    });
+    document.documentElement.style.scrollBehavior = 'smooth';
+  </script>
+
+
+</body>
+</html>
+
